@@ -9,7 +9,7 @@
 
 TBitField::TBitField(int len)
 {
-    if (len < 0) throw std::invalid_argument("");
+    if (len < 0) throw std::invalid_argument("TBitField::TBitField: len must be non-negative");
 
     BitLen = len;
     int MemSize = sizeof(TELEM) * 8;
@@ -37,7 +37,7 @@ int TBitField::GetMemIndex(const int n) const // индекс Мем для би
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
 {
-    return TELEM(1U << (n % (sizeof(TELEM) * 8)));
+    return TELEM(static_cast<TELEM>(1) << (n % (sizeof(TELEM) * 8)));
 }
 
 // доступ к битам битового поля
@@ -49,21 +49,21 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
-    if (n < 0 || n >= BitLen) throw std::out_of_range("");
+    if (n < 0 || n >= BitLen) throw std::out_of_range("TBitField::SetBit: index is out of range");
 
     pMem[GetMemIndex(n)] |= GetMemMask(n);
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
-    if (n < 0 || n >= BitLen) throw std::out_of_range("");
+    if (n < 0 || n >= BitLen) throw std::out_of_range("TBitField::ClrBit: index is out of range");
 
     pMem[GetMemIndex(n)] &= ~GetMemMask(n);
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-    if (n < 0 || n >= BitLen) throw std::out_of_range("");
+    if (n < 0 || n >= BitLen) throw std::out_of_range("TBitField::GetBit: index is out of range");
 
     TELEM res = pMem[GetMemIndex(n)] & GetMemMask(n);
     return res != 0;
@@ -101,7 +101,7 @@ int TBitField::operator!=(const TBitField &bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
-    TBitField res(std::max(BitLen, bf.BitLen));
+    TBitField res(BitLen >= bf.BitLen ? *this : bf);
     for (int i = 0; i < std::min(MemLen, bf.MemLen); ++i) {
         res.pMem[i] = pMem[i] | bf.pMem[i];
     }
@@ -125,7 +125,7 @@ TBitField TBitField::operator~(void) // отрицание
     }
     int lastBits = BitLen % (sizeof(TELEM) * 8);
     if (lastBits != 0) {
-        TELEM mask = (1U << lastBits) - 1U;
+        TELEM mask = (static_cast<TELEM>(1) << lastBits) - static_cast<TELEM>(1);
         res.pMem[MemLen - 1] &= mask;
     }
     return res;
