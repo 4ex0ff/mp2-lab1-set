@@ -294,3 +294,32 @@ TEST(TSet, check_negation_operator)
 
   EXPECT_EQ(expSet, set1);
 }
+
+TEST(TSet, check_output_operator)
+{
+	const int size = 4;
+	TSet set(size);
+	// set = {1, 3}
+	set.InsElem(1);
+	set.InsElem(3);
+
+	std::stringstream sstr;
+	sstr << set;
+
+	EXPECT_EQ("{1, 3}", sstr.str());
+}
+
+TEST(TSet, check_input_operator)
+{
+	const int size = 4;
+	TSet set(size), expSet(size);
+	// expSet = {1, 3}
+	expSet.InsElem(1);
+	expSet.InsElem(3);
+
+	std::stringstream sstr;
+	sstr << "1 3";
+	sstr >> set;
+
+	EXPECT_EQ(expSet, set);
+}

@@ -308,3 +308,32 @@ TEST(TBitField, bitfields_with_different_bits_are_not_equal)
 
   EXPECT_NE(bf1, bf2);
 }
+
+TEST(TBitField, check_output_operator)
+{
+    const int size = 4;
+    TBitField bf(size);
+    // bf = 0011
+    bf.SetBit(2);
+    bf.SetBit(3);
+
+    std::stringstream sstr;
+    sstr << bf;
+    
+    EXPECT_EQ("0011", sstr.str());
+}
+
+TEST(TBitField, check_input_operator)
+{
+    const int size = 4;
+    TBitField bf(size), expBf(size);
+    // expBf = 0011
+    expBf.SetBit(2);
+    expBf.SetBit(3);
+
+    std::stringstream sstr;
+    sstr << "0011";
+    sstr >> bf;
+
+    EXPECT_EQ(expBf, bf);
+}

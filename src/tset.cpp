@@ -114,7 +114,7 @@ std::istream &operator>>(std::istream &istr, TSet &s) // ввод
 
 std::ostream& operator<<(std::ostream &ostr, const TSet &s) // вывод
 {
-    ostr << "{ ";
+    ostr << "{";
     bool isFirst = true;
     for (int i = 0; i < s.MaxPower; ++i) {
         if (s.IsMember(i)) {
@@ -123,6 +123,6 @@ std::ostream& operator<<(std::ostream &ostr, const TSet &s) // вывод
             isFirst = false;
         }
     }
-    ostr << " }";
+    ostr << "}";
     return ostr;
 }
