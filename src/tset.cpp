@@ -66,33 +66,38 @@ int TSet::operator!=(const TSet &s) const // сравнение
     return !(*this == s);
 }
 
-TSet TSet::operator+(const TSet &s) // объединение
+TSet TSet::operator+(const TSet &s) const // объединение
 {
     return TSet(BitField | s.BitField);
 }
 
-TSet TSet::operator+(const int Elem) // объединение с элементом
+TSet TSet::operator+(const int Elem) const // объединение с элементом
 {
     TSet res(*this);
     res.InsElem(Elem);
     return res;
 }
 
-TSet TSet::operator-(const int Elem) // разность с элементом
+TSet TSet::operator-(const int Elem) const // разность с элементом
 {
     TSet res(*this);
     res.DelElem(Elem);
     return res;
 }
 
-TSet TSet::operator*(const TSet &s) // пересечение
+TSet TSet::operator*(const TSet &s) const // пересечение
 {
     return TSet(BitField & s.BitField);
 }
 
-TSet TSet::operator~(void) // дополнение
+TSet TSet::operator~(void) const // дополнение
 {
     return TSet(~BitField);
+}
+
+TSet TSet::operator^(const TSet& s) const // симметрическая разность
+{
+    return TSet(BitField ^ s.BitField);
 }
 
 // перегрузка ввода/вывода
